@@ -1,0 +1,28 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model BotConfiguration {
+  conversationFlows ConversationFlow[]
+  createdAt         DateTime           @default(now())
+  id                String             @id @default(cuid())
+  isActive          Boolean?
+  name              String?
+  settings          Json?
+  updatedAt         DateTime           @updatedAt
+}
+
+model ConversationFlow {
+  botConfiguration   BotConfiguration? @relation(fields: [botConfigurationId], references: [id])
+  botConfigurationId String?
+  createdAt          DateTime          @default(now())
+  flow               Json?
+  id                 String            @id @default(cuid())
+  name               String?
+  updatedAt          DateTime          @updatedAt
+}
